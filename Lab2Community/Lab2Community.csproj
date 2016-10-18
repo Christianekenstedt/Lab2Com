@@ -89,6 +89,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -203,6 +205,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BL\Message.cs" />
     <Compile Include="Models\View\AccountViewModels.cs" />
     <Compile Include="Models\BL\IdentityModels.cs" />
     <Compile Include="Models\View\ManageViewModels.cs" />
