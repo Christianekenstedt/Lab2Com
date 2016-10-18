@@ -1,9 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity
+@{
     ViewBag.Title = "Home Page";
 }
 
 <div class="jumbotron">
-    <h1>Welcome {User}!</h1>
+    <h1>Welcome @User.Identity.GetUserName()!</h1>
     <p class="lead">Bla bla bla bla bla</p>
     <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
