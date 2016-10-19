@@ -18,7 +18,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Recievers, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBoxFor(m => m.SelectedRecieverId, Model.Recievers,  new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ListBoxFor(m => m.SelectedRecieverId, Model.Recievers,  htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Recievers, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -13,19 +13,58 @@ namespace Lab2Community.Controllers
     public class MessageController : Controller
     {
         [HttpGet]
+        public ActionResult List()
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                List<RecieverViewModel> list = new List<RecieverViewModel>();
+                foreach (ApplicationUser au in db.Users.ToList())
+                {
+                    list.Add(new RecieverViewModel {RecieverId = au.Id, UserName = au.UserName});
+                }
+                return View(list);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult From(string id)
+        {
+            if(id == null)
+            {
+                return RedirectToAction("List", "Message");
+            }
+
+            using (var db = new ApplicationDbContext())
+            {
+                var models = new List<ShortMessageViewModel>();
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var messages = db.Messages.Where(m => m.RecipientUsers.Any(u => u.Id == user.Id)).ToList();
+                var msgs = messages.Where(snd => snd.Sender.Id.Equals(id));
+
+                //Inte lazy?
+                foreach (Message m in msgs)
+                {
+                    models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });
+                }
+
+                return View(models);
+            }
+        }
+
+        [HttpGet]
         // GET: Message
         public ActionResult Index()
         {
             using (var db = new ApplicationDbContext())
             {
                 var models = new List<ShortMessageViewModel>();
-                //var user = db.Users.Find(User.Identity.GetUserId());
-                //var messages = db.Messages.Where(m => m.RecipientUsers.Contains(user)).ToList();
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var messages = db.Messages.Where(m => m.RecipientUsers.Any(u => u.Id == user.Id)).ToList();
 
                 //Inte lazy?
-                foreach (Message m in db.Messages.ToList())
+                foreach (Message m in messages)
                 {
-                    models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });
+                    models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName,  Read = m.Read, Timestamp = m.Timestamp, Title = m.Title});
                 }
 
                 return View(models);

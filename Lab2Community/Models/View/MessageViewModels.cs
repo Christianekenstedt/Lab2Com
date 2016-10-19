@@ -7,6 +7,14 @@ using System.Web.Mvc;
 
 namespace Lab2Community.Models.View
 {
+    public class ViewSenderViewModel
+    {
+        [Display(Name = "Filter Sender")]
+        public IEnumerable<SelectListItem> Senders { get; set; }
+        //Borde vara en lista så vi kan ha flera.
+        [Required]
+        public string SelectedSenderId { get; set; }
+    }
     public class ShortMessageViewModel
     {
         public int MessageId { get; set; }
@@ -18,6 +26,11 @@ namespace Lab2Community.Models.View
         public string Title { get; set; }
         [Display(Name = "Read")]
         public bool Read { get; set; }
+        [Display(Name = "Recipient(s)")]
+        public IEnumerable<SelectListItem> Recievers { get; set; }
+        //Borde vara en lista så vi kan ha flera.
+        [Required]
+        public string[] SelectedRecieverId { get; set; }
 
     }
 
@@ -40,6 +53,7 @@ namespace Lab2Community.Models.View
     public class RecieverViewModel
     {
         public string RecieverId { get; set; }
+        [Display(Name ="Name")]
         public string UserName { get; set; }
     }
 }
