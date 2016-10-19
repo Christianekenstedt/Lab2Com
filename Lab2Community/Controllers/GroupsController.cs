@@ -68,7 +68,14 @@ namespace Lab2Community.Controllers
 
                 if (group != null)
                 {
-                    var model = new UserGroupDetailsViewModel() { GroupId = group.GroupId, Members = group.Members, Name = group.Name };
+                    var members = new List<UserViewModel>();
+
+                    foreach(ApplicationUser member in group.Members)
+                    {
+                        members.Add(new UserViewModel { UserId = member.Id, Username = member.UserName });
+                    }
+
+                    var model = new UserGroupDetailsViewModel() { GroupId = group.GroupId, Members = members, Name = group.Name };
                     return View(model);
                 }else
                 {
@@ -77,5 +84,33 @@ namespace Lab2Community.Controllers
                 
             }
         }
+
+        [HttpGet]
+        public ActionResult Join(int id)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user_id = User.Identity.GetUserId();
+                var user = db.Users.First(u => u.Id.Equals(user_id));
+                db.UserGroups.FirstOrDefault(g => g.GroupId == id).Members.Add(user);
+                db.SaveChanges();
+                return RedirectToAction("Details", "Groups", new { id=id});
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Leave(int id)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user_id = User.Identity.GetUserId();
+                var user = db.Users.First(u => u.Id.Equals(user_id));
+                db.UserGroups.FirstOrDefault(g => g.GroupId == id).Members.Remove(user);
+                db.SaveChanges();
+                return RedirectToAction("Details", "Groups", new { id = id });
+            }
+        }
+
+
     }
 }

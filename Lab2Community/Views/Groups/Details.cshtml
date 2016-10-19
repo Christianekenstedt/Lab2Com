@@ -4,6 +4,8 @@
     ViewBag.Title = "Details";
 }
 
+<script src="∼/Scripts/jquery.unobtrusive-ajax.js"></script>
+
 <h2>Details</h2>
 
 <div>
@@ -19,15 +21,18 @@
         </dd>
         <dt>Members</dt>
         <dd>
-            @Html.DisplayFor(model => model.Members)
-        </dd>
-        <dt>Join</dt>
-        <dd>
-            @Html.BeginForm(){ 
-                <input type="submit" value="Join"/>
+            @foreach(var member in Model.Members)
+            {
+                @member.Username<br />
             }
         </dd>
-
+        <dt></dt>
+        <dd>
+            @Html.ActionLink("Join", "Join", new { id = Model.GroupId})
+            <br />
+            @Html.ActionLink("Leave", "Leave", new { id = Model.GroupId })
+        </dd>
+        
     </dl>
 </div>
 <p>

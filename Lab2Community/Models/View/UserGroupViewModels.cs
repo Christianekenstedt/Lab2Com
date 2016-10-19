@@ -24,7 +24,12 @@ namespace Lab2Community.Models.View
     {
         public int GroupId { get; set; }
         public string Name { get; set; }
-        public IEnumerable<ApplicationUser> Members { get; set; }
+        public IEnumerable<UserViewModel> Members { get; set; }
+
+    }
+
+    public class UserJoinGroupViewModel
+    {
 
     }
 
