@@ -34,7 +34,7 @@ namespace Lab2Community.Models.View
         public IEnumerable<SelectListItem> Recievers { get; set; }
         //Borde vara en lista så vi kan ha flera.
         [Required]
-        public string SelectedRecieverId { get; set; }
+        public string[] SelectedRecieverId { get; set; }
     }
 
     public class RecieverViewModel
