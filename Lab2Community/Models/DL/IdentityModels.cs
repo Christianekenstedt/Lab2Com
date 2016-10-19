@@ -23,7 +23,6 @@ namespace Lab2Community.Models
         public virtual ICollection<Message> MessagesSent { get; set; }
         public virtual ICollection<Message> MessagesReceived { get; set; }
         public virtual ICollection<UserGroup> Groups { get; set; }
-        public int NumberOfLogins { get; set; }
 
         public ApplicationUser()
         {
@@ -37,6 +36,7 @@ namespace Lab2Community.Models
     {
         public DbSet<Message> Messages { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<LoginRecord> LoginRecords { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

@@ -207,6 +207,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DL\LoginRecord.cs" />
     <Compile Include="Models\DL\Message.cs" />
     <Compile Include="Models\DL\UserGroup.cs" />
     <Compile Include="Models\View\AccountViewModels.cs" />

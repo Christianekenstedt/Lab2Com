@@ -78,6 +78,15 @@ namespace Lab2Community.Controllers
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            if(result == SignInStatus.Success)
+            {
+                using (var db = new ApplicationDbContext())
+                {
+                    var user = db.Users.FirstOrDefault(p => p.Email.Equals(model.Email));
+                    db.LoginRecords.Add(new LoginRecord { User = user, TimeOfLogin = DateTime.Now });
+                    db.SaveChanges();
+                }
+            }
             switch (result)
             {
                 case SignInStatus.Success:
