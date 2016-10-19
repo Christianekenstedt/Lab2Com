@@ -15,11 +15,12 @@ namespace Lab2Community
     {
         protected void Application_Start()
         {
+            /*
             Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseAlways<ApplicationDbContext>());
             using (var context = new ApplicationDbContext())
             {
                 context.Database.Initialize(force: true);
-            }
+            }*/
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

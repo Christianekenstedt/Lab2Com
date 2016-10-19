@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Lab2Community.Models.View
 {
@@ -28,9 +29,17 @@ namespace Lab2Community.Models.View
         [Display(Name = "Message content")]
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
-        /*[Required]
-        [Display(Name = "Recipient")]
-        public ICollection<System.Web.Mvc.SelectListItem> Recievers { get; set; }
-        */
+        
+        [Display(Name = "Recipient(s)")]
+        public IEnumerable<SelectListItem> Recievers { get; set; }
+        //Borde vara en lista så vi kan ha flera.
+        [Required]
+        public string SelectedRecieverId { get; set; }
+    }
+
+    public class RecieverViewModel
+    {
+        public string RecieverId { get; set; }
+        public string UserName { get; set; }
     }
 }
