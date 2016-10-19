@@ -13,10 +13,18 @@ namespace Lab2Community.Models.DL
         public int MessageId { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public User Sender { get; set; }
-        public virtual List<User> RecipientUsers { get; set; }
-        public virtual List<UserGroup> RecipientGroups { get; set; }
+        [InverseProperty("MessagesSent")]
+        public virtual ApplicationUser Sender { get; set; }
+        [InverseProperty("MessagesReceived")]
+        public virtual ICollection<ApplicationUser> RecipientUsers { get; set; }
+        public virtual ICollection<UserGroup> RecipientGroups { get; set; }
         public DateTime Timestamp { get; set; }
         public bool Read { get; set; }
+
+        public Message()
+        {
+            RecipientUsers = new List<ApplicationUser>();
+            RecipientGroups = new List<UserGroup>();
+        }
     }
 }

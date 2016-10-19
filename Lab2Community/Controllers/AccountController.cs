@@ -157,18 +157,6 @@ namespace Lab2Community.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    //create a user in our own dbcontext
-
-                    //Lab2Community.Models.BL.User.AddUser(new Models.BL.User { UserId = user.Id, Username = user.UserName });
-
-                    using (var db = new CommunityContext())
-                    {
-                        db.Users.Add(new User { UserId = user.Id, Username = user.UserName });
-                        db.SaveChanges();
-                    }
-                        
-                    
-
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771

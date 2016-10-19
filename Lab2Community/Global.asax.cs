@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Lab2Community.Models;
+using Lab2Community.Models.DL;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +15,11 @@ namespace Lab2Community
     {
         protected void Application_Start()
         {
+            Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseAlways<ApplicationDbContext>());
+            using (var context = new ApplicationDbContext())
+            {
+                context.Database.Initialize(force: true);
+            }
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

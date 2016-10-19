@@ -3,6 +3,9 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Lab2Community.Models.DL;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Lab2Community.Models
 {
@@ -16,10 +19,25 @@ namespace Lab2Community.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public virtual ICollection<Message> MessagesSent { get; set; }
+        public virtual ICollection<Message> MessagesReceived { get; set; }
+        public virtual ICollection<UserGroup> Groups { get; set; }
+        public int NumberOfLogins { get; set; }
+
+        public ApplicationUser()
+        {
+            MessagesSent = new List<Message>();
+            MessagesReceived = new List<Message>();
+            Groups = new List<UserGroup>();
+        }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
