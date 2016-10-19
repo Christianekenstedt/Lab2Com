@@ -6,13 +6,13 @@ using System.Web;
 
 namespace Lab2Community.Models.DL
 {
-    public class UserDL
+    public class User
     {
         [Key]
         public string UserId { get; set; }
         public string Username { get; set; }
-        public virtual List<MessageDL> Messages { get; set; }
-        public virtual List<UserGroupDL> Groups { get; set; }
+        public virtual List<Message> Messages { get; set; }
+        public virtual List<UserGroup> Groups { get; set; }
         public int NumberOfLogins { get; set; }
     }
 }

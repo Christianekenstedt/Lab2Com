@@ -7,9 +7,9 @@ namespace Lab2Community.Models.DL
 
     public partial class CommunityContext : DbContext
     {
-        public DbSet<MessageDL> Messages { get; set; }
-        public DbSet<UserGroupDL> UserGroups { get; set; }
-        public DbSet<UserDL> Users { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<User> Users { get; set; }
 
         public CommunityContext()
             : base("name=CommunityContext")

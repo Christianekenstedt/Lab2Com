@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Lab2Community.Models;
 using Lab2Community.Models.DL;
-using Lab2Community.Models.BL;
+
 
 namespace Lab2Community.Controllers
 {
@@ -159,9 +159,17 @@ namespace Lab2Community.Controllers
                 {
                     //create a user in our own dbcontext
 
-                    Lab2Community.Models.BL.User.AddUser(new Models.BL.User { UserId = user.Id, Username = user.UserName });
+                    //Lab2Community.Models.BL.User.AddUser(new Models.BL.User { UserId = user.Id, Username = user.UserName });
 
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    using (var db = new CommunityContext())
+                    {
+                        db.Users.Add(new User { UserId = user.Id, Username = user.UserName });
+                        db.SaveChanges();
+                    }
+                        
+                    
+
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
