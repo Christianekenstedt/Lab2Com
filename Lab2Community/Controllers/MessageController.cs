@@ -47,7 +47,7 @@ namespace Lab2Community.Controllers
                 //Inte lazy?
                 foreach (Message m in msgs)
                 {
-                    models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });
+                    models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });   
                 }
 
                 return PartialView("PartialUsersMessages",models);
