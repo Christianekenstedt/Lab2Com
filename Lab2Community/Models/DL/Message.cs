@@ -20,6 +20,7 @@ namespace Lab2Community.Models.DL
         public virtual ICollection<UserGroup> RecipientGroups { get; set; }
         public DateTime Timestamp { get; set; }
         public bool Read { get; set; }
+        public bool Deleted { get; set; }
 
         public Message()
         {
