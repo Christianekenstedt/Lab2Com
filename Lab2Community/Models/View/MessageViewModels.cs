@@ -47,21 +47,36 @@ namespace Lab2Community.Models.View
         public string Text { get; set; }
     }
 
-    public class CreateMessageViewModel
+    public class CreateMessageViewModel : IValidatableObject
     {
         [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
+
         [Display(Name = "Message content")]
         [DataType(DataType.MultilineText)]
         public string Text { get; set; }
         
-        [Display(Name = "Recipient(s)")]
+        [Display(Name = "To users: ")]
         public IEnumerable<SelectListItem> Recievers { get; set; }
-        //Borde vara en lista så vi kan ha flera.
-        [Required]
+
+        [Display(Name = "To groups:")]
+        public IEnumerable<SelectListItem> ReceiverGroups { get; set; }
+
         public string[] SelectedRecieverId { get; set; }
+
+        public int[] SelectedGroupId { get; set; }
         public string Response { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+            if(SelectedGroupId == null && SelectedRecieverId == null)
+            {
+                results.Add(new ValidationResult("Atleast one recipient must be selected."));
+            }
+            return results;
+        }
     }
 
     public class RecieverViewModel
