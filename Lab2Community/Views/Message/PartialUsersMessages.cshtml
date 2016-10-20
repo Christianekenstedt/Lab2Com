@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Lab2Community.Models.View.ShortMessageViewModel>
+<h3>Message(s)</h3>
+<hr />
+@foreach (var m in Model)
+{
+    <a href="javascript:void(0)" onclick="openMessage('@m.MessageId')">
+        <div class="mail_list">
+            <div class="left">
+                @if (!m.Read)
+                {
+                    <h4><strong>@m.Title</strong></h4>
+                }
+                else
+                {
+                    <h4>@m.Title </h4>
+                }
+                
+            </div>
+                
+                
+        </div>
+    </a>
+    <div class="right">
+        <h4>@m.Timestamp</h4>
+    </div>
+    <hr />
+}
+

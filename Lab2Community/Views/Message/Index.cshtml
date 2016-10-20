@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Lab2Community.Models.View.ShortMessageViewModel>
+﻿@model IEnumerable< Lab2Community.Models.View.RecieverViewModel >
 
 @{
     ViewBag.Title = "Index";
@@ -10,63 +10,69 @@
 <h2>Inbox</h2>
 
 <p>
-    @Html.ActionLink("Create New Message", "Create")
+    @Html.ActionLink("Create New Message", "Create", new { @class= "btn btn-sm btn-success btn-block" })
 </p>
 
+<div class="col-md-12">
+    <div class="row">
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Timestamp)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Read)
-        </th>
-        <th></th>
-    </tr>
+        
+        <div class="col-sm-3">
+            <h3>Sender(s)</h3>            
+            <hr />
+            @foreach (var user in Model)
+            {
+                <a href="javascript:void(0)" onclick="openMessagesFromUser('@user.RecieverId.ToString()')">
+                    <div>
+                        <div class="left">
+                            <h4>@user.UserName </h4>
+                        </div>
+                    </div>
+                </a>
+                <hr />
+            }
+        </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <th>
-            @Html.DisplayFor(model => item.Sender)
-        </th>
-        <td>
-            @Html.DisplayFor(modelItem => item.Timestamp)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Read)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.MessageId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.MessageId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.MessageId })
-            <button onclick="openMessage(@item.MessageId)"> Open </button>
-        </td>
-    </tr>
-}
+        
+        <div id="messagesPartial" class="col-sm-3"></div>
 
-</table>
+        
+        <div id="detalisPartial" class="col-sm-6"></div>
+
+    </div> 
+           
+</div>
+        
 
 <script>
-    function openMessage(id){
+
+    function openMessagesFromUser(id) {
         $.ajax({
             type: "GET",
-            url: "OpenMessage",
-            data: { messageId: id },
-            success: function (data) {
-                alert(data.Text);
-            },
-            dataType:"json"
+            url: "From",
+            data: { id: id }
+        }).done(function(data){
+            $('#messagesPartial').html(data);
+        });
+
+    }
+    function openMessage(id) {
+        $.ajax({
+            type: "GET",
+            url: "Details",
+            data: { id: id }
+        }).done(function (data) {
+            $('#detalisPartial').html(data);
         });
     }
-    
+    function deleteMessage(id) {
+        alert("Delete");
+        $.ajax({
+            type: "POST",
+            url: "Delete",
+            data: { id: id }
+        }).done(function (data) {
+            
+        });
+    }
 </script>
