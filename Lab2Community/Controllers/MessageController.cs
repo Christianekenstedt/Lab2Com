@@ -170,7 +170,8 @@ namespace Lab2Community.Controllers
             {
                 var user_id = User.Identity.GetUserId();
                 var msg = db.Messages.First(m => m.MessageId == id);
-                db.Users.FirstOrDefault(u => u.Id.Equals(user_id)).MessagesReceived.Remove(msg);
+                //db.Users.FirstOrDefault(u => u.Id.Equals(user_id)).MessagesReceived.Remove(msg);
+                msg.Deleted = true;
                 db.SaveChanges();
             }
 
