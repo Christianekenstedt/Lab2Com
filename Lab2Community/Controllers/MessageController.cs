@@ -50,7 +50,7 @@ namespace Lab2Community.Controllers
                     models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });   
                 }
 
-                return PartialView("PartialUsersMessages",models);
+                return PartialView("_UsersMessages",models);
             }
         }
 
@@ -157,7 +157,7 @@ namespace Lab2Community.Controllers
                 message.Read = true;
                 db.SaveChanges();
                 LongMessageViewModel model = new LongMessageViewModel {MessageId = message.MessageId, Sender = message.Sender.UserName, Text = message.Text, Timestamp = message.Timestamp, Title = message.Title };
-                return PartialView("PartialDetails",model);
+                return PartialView("_Details",model);
             }
  
         }
