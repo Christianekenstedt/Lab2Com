@@ -34,6 +34,19 @@ namespace Lab2Community.Models.View
 
     }
 
+    public class LongMessageViewModel
+    {
+        public int MessageId { get; set; }
+        [Display(Name = "From")]
+        public string Sender { get; set; }
+        [Display(Name = "Time")]
+        public DateTime Timestamp { get; set; }
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+        [Display(Name = "Content")]
+        public string Text { get; set; }
+    }
+
     public class CreateMessageViewModel
     {
         [Required]
@@ -48,6 +61,7 @@ namespace Lab2Community.Models.View
         //Borde vara en lista så vi kan ha flera.
         [Required]
         public string[] SelectedRecieverId { get; set; }
+        public string Response { get; set; }
     }
 
     public class RecieverViewModel
@@ -55,5 +69,6 @@ namespace Lab2Community.Models.View
         public string RecieverId { get; set; }
         [Display(Name ="Name")]
         public string UserName { get; set; }
+        
     }
 }

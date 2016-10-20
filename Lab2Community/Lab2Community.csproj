@@ -306,6 +306,7 @@
     <Content Include="Views\Groups\Details.cshtml" />
     <Content Include="Views\Message\From.cshtml" />
     <Content Include="Views\Message\List.cshtml" />
+    <Content Include="Views\Message\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

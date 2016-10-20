@@ -9,24 +9,23 @@
     <p class="lead">Your last visit was @Model.LastLogin</p>
     <p>You have been logged in @Model.LoginsLastMonth times last month.</p>
     <p>You have a total of @Model.UnreadMessagesCount unread messages.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Statics</h2>
+        <h2>Statistics</h2>
         <p>
-           Unread Messages:
+           Unread Messages: @Model.UnreadMessagesCount
         </p>
     </div>
     <div class="col-md-4">
         <h2>Messages</h2>
         <p>Kanske länka vidare till meddelanden via knappen?</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        <p><a class="btn btn-default" href="/Message/List">Messages</a></p>
     </div>
     <div class="col-md-4">
         <h2>Group</h2>
         <p>Visa grupper osv?</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <p><a class="btn btn-default" href="/Groups/Index">Learn more &raquo;</a></p>
     </div>
 </div>

@@ -12,6 +12,9 @@ namespace Lab2Community.Controllers
 {
     public class MessageController : Controller
     {
+
+       
+
         [HttpGet]
         public ActionResult List()
         {
@@ -99,14 +102,26 @@ namespace Lab2Community.Controllers
                 using (var db = new ApplicationDbContext())
                 {
                     var sender = db.Users.Find(User.Identity.GetUserId());
-                    foreach(string id in model.SelectedRecieverId)
+                    string responseMsg = "Message was sent to ";
+                    foreach (string id in model.SelectedRecieverId)
                     {
-                        recipientUsers.Add(db.Users.Find(id));
+                        ApplicationUser usr = db.Users.Find(id);
+                        recipientUsers.Add(usr);
+                        responseMsg += usr.UserName + ", ";
                     }
-                    
-                    db.Messages.Add(new Message { Title = model.Title, Text = model.Text , Sender = sender, Timestamp = DateTime.Now, Read = false, RecipientGroups = new List<UserGroup>(), RecipientUsers = recipientUsers });
+                    DateTime timestamp= DateTime.Now;
+                    db.Messages.Add(new Message { Title = model.Title, Text = model.Text , Sender = sender, Timestamp = timestamp, Read = false, RecipientGroups = new List<UserGroup>(), RecipientUsers = recipientUsers });
                     db.SaveChanges();
-                    return RedirectToAction("Index", "Message");
+                    
+
+                    responseMsg += " at " + timestamp.ToString();
+
+                    List<RecieverViewModel> recieverList = new List<RecieverViewModel>();
+                    foreach (ApplicationUser au in db.Users.ToList())
+                    {
+                        recieverList.Add(new RecieverViewModel { RecieverId = au.Id, UserName = au.UserName });
+                    }
+                    return View("Create", new CreateMessageViewModel { Recievers = new MultiSelectList(recieverList, "RecieverId", "UserName"), Response = responseMsg, SelectedRecieverId = { }, Text = null, Title = null });
                 }
             }
             // Something went wrong.
@@ -114,9 +129,34 @@ namespace Lab2Community.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details()
+        public ActionResult Details(int? id)
         {
-            return View();
+            if (id == null) return RedirectToAction("List", "Message");
+
+            using (var db= new ApplicationDbContext())
+            {
+                
+                var message = db.Messages.Find(id);
+                LongMessageViewModel model = new LongMessageViewModel {MessageId = message.MessageId, Sender = message.Sender.UserName, Text = message.Text, Timestamp = message.Timestamp, Title = message.Title };
+                return View(model);
+            }
+ 
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+
+            if (id == null) return RedirectToAction("List", "Messsage");
+
+            using (var db = new ApplicationDbContext())
+            {
+                var user_id = User.Identity.GetUserId();
+                var msg = db.Messages.First(m => m.MessageId == id);
+                db.Users.FirstOrDefault(u => u.Id.Equals(user_id)).MessagesReceived.Remove(msg);
+            }
+
+            return RedirectToAction("List", "Message");
         }
     }
 }
