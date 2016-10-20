@@ -73,16 +73,34 @@ namespace Lab2Community.Controllers
         // GET: Message/Create
         public ActionResult Create()
         {
+            var model = generateCreateMessageModel();
+            return View(model);
+        }
+
+        private CreateMessageViewModel generateCreateMessageModel()
+        {
             using (var db = new ApplicationDbContext())
             {
                 List<RecieverViewModel> recieverList = new List<RecieverViewModel>();
-                foreach(ApplicationUser au in db.Users.ToList())
+                List<ShortViewUserGroupViewModel> groupList = new List<ShortViewUserGroupViewModel>();
+                foreach (ApplicationUser au in db.Users.ToList())
                 {
                     recieverList.Add(new RecieverViewModel { RecieverId = au.Id, UserName = au.UserName });
                 }
+                foreach (UserGroup g in db.UserGroups)
+                {
+                    groupList.Add(new ShortViewUserGroupViewModel { GroupId = g.GroupId, Name = g.Name });
+                }
 
-                CreateMessageViewModel model = new CreateMessageViewModel { Recievers = new MultiSelectList(recieverList, "RecieverId", "UserName")  };
-                return View(model);
+                CreateMessageViewModel model = new CreateMessageViewModel
+                {
+                    Recievers = new MultiSelectList(recieverList, "RecieverId", "UserName"),
+                    ReceiverGroups = new MultiSelectList(groupList, "GroupId", "Name"),
+                    Response = " ",
+                    SelectedRecieverId = new string[recieverList.Count()],
+                    SelectedGroupId = new int[groupList.Count()]
+                };
+                return model;
             }
         }
 
@@ -93,34 +111,38 @@ namespace Lab2Community.Controllers
             if (ModelState.IsValid)
             {
                 List<ApplicationUser> recipientUsers = new List<ApplicationUser>();
+                List<UserGroup> recipientUserGroups = new List<UserGroup>();
                 
                 using (var db = new ApplicationDbContext())
                 {
                     var sender = db.Users.Find(User.Identity.GetUserId());
                     string responseMsg = "Message was sent to ";
-                    foreach (string id in model.SelectedRecieverId)
-                    {
-                        ApplicationUser usr = db.Users.Find(id);
-                        recipientUsers.Add(usr);
+
+                    if(model.SelectedRecieverId != null)
+                        recipientUsers = db.Users.Where(u => model.SelectedRecieverId.Contains(u.Id)).ToList();
+                    if(model.SelectedGroupId != null)
+                        recipientUserGroups = db.UserGroups.Where(g => model.SelectedGroupId.Contains(g.GroupId)).ToList();
+
+                    foreach (var usr in recipientUsers)
                         responseMsg += usr.UserName + ", ";
-                    }
-                    DateTime timestamp= DateTime.Now;
-                    db.Messages.Add(new Message { Title = model.Title, Text = model.Text , Sender = sender, Timestamp = timestamp, Read = false, RecipientGroups = new List<UserGroup>(), RecipientUsers = recipientUsers });
+
+                    foreach (var grp in recipientUserGroups)
+                        responseMsg += grp.Name + ", ";
+
+                    db.Messages.Add(new Message { Title = model.Title, Text = model.Text , Sender = sender, Timestamp = DateTime.Now, Read = false, RecipientGroups = recipientUserGroups, RecipientUsers = recipientUsers });
                     db.SaveChanges();
+
+                    responseMsg += " at " + DateTime.Now;
+
+                    var newMsgModel = generateCreateMessageModel();
+
+                    newMsgModel.Response = responseMsg;
                     
-
-                    responseMsg += " at " + timestamp.ToString();
-
-                    List<RecieverViewModel> recieverList = new List<RecieverViewModel>();
-                    foreach (ApplicationUser au in db.Users.ToList())
-                    {
-                        recieverList.Add(new RecieverViewModel { RecieverId = au.Id, UserName = au.UserName });
-                    }
-                    return View("Create", new CreateMessageViewModel { Recievers = new MultiSelectList(recieverList, "RecieverId", "UserName"), Response = responseMsg, SelectedRecieverId = { }, Text = null, Title = null });
+                    return View(newMsgModel);
                 }
             }
             // Something went wrong.
-            return View(model);
+            return View("Error");
         }
 
         [HttpGet]
