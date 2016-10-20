@@ -45,7 +45,7 @@ namespace Lab2Community.Controllers
                 var msgs = messages.Where(snd => snd.Sender.Id.Equals(id));
 
                 //Inte lazy?
-                foreach (Message m in msgs)
+                foreach (Message m in msgs.Where(p => !p.Deleted))
                 {
                     models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });   
                 }
