@@ -154,6 +154,8 @@ namespace Lab2Community.Controllers
             {
                 
                 var message = db.Messages.Find(id);
+                message.Read = true;
+                db.SaveChanges();
                 LongMessageViewModel model = new LongMessageViewModel {MessageId = message.MessageId, Sender = message.Sender.UserName, Text = message.Text, Timestamp = message.Timestamp, Title = message.Title };
                 return PartialView("PartialDetails",model);
             }
