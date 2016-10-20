@@ -35,6 +35,7 @@ namespace Lab2Community.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Message> Messages_Deleted { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<LoginRecord> LoginRecords { get; set; }
 
