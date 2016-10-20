@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 
 namespace Lab2Community.Controllers
@@ -40,17 +41,32 @@ namespace Lab2Community.Controllers
             using (var db = new ApplicationDbContext())
             {
                 var models = new List<ShortMessageViewModel>();
-                var user = db.Users.Find(User.Identity.GetUserId());
-                var messages = db.Messages.Where(m => m.RecipientUsers.Any(u => u.Id == user.Id)).ToList();
-                var msgs = messages.Where(snd => snd.Sender.Id.Equals(id));
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.FirstOrDefault(p=>p.Id.Equals(userId));
+                var messagesToUser = db.Messages.Where(
+                    m => m.RecipientUsers.Any(u => u.Id.Equals(user.Id)) && 
+                    !m.DeletedByUsers.Any(u=>u.Id.Equals(user.Id))).ToList();
+
+                var messagesToUserGroup = db.Messages.Where(m => m.RecipientGroups.Where(g=>g.Members.Where(u=>u.Id.Equals(userId)).Any() && !m.DeletedByGroups.Contains(g)).Any()).ToList();
+
+                var msgs = messagesToUser.Union(messagesToUserGroup).ToList();
+
+                var messagesRead = msgs.Where(
+                    m => m.ReadByUsers.Any(u => u.Id.Equals(user.Id))
+                    || m.ReadByGroups.Intersect(user.Groups).Any());
 
                 //Inte lazy?
                 foreach (Message m in msgs)
                 {
-                    models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });
+                    var read = false;
+                    if (messagesRead.Contains(m))
+                    {
+                        read = true;
+                    }
+                    models.Add(new ShortMessageViewModel { Read = read, MessageId = m.MessageId, Sender = m.Sender.UserName, Timestamp = m.Timestamp, Title = m.Title });
                 }
 
-                return PartialView("PartialUsersMessages",models);
+                return PartialView("PartialUsersMessages",models.OrderByDescending(m=>m.Timestamp));
             }
         }
 
@@ -61,6 +77,7 @@ namespace Lab2Community.Controllers
             using (var db = new ApplicationDbContext())
             {
                 List<RecieverViewModel> list = new List<RecieverViewModel>();
+
                 foreach (ApplicationUser au in db.Users.ToList())
                 {
                     list.Add(new RecieverViewModel { RecieverId = au.Id, UserName = au.UserName });
@@ -129,7 +146,7 @@ namespace Lab2Community.Controllers
                     foreach (var grp in recipientUserGroups)
                         responseMsg += grp.Name + ", ";
 
-                    db.Messages.Add(new Message { Title = model.Title, Text = model.Text , Sender = sender, Timestamp = DateTime.Now, Read = false, RecipientGroups = recipientUserGroups, RecipientUsers = recipientUsers });
+                    db.Messages.Add(new Message { Title = model.Title, Text = model.Text , Sender = sender, Timestamp = DateTime.Now, RecipientGroups = recipientUserGroups, RecipientUsers = recipientUsers });
                     db.SaveChanges();
 
                     responseMsg += " at " + DateTime.Now;
@@ -150,11 +167,13 @@ namespace Lab2Community.Controllers
         {
             if (id == null) return RedirectToAction("Index", "Message");
 
-            using (var db= new ApplicationDbContext())
+            using (var db = new ApplicationDbContext())
             {
-                
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.Find(userId);
                 var message = db.Messages.Find(id);
-                message.Read = true;
+                message.ReadByUsers.Add(user);
+                message.ReadByGroups = message.ReadByGroups.Union(user.Groups).ToList();
                 db.SaveChanges();
                 LongMessageViewModel model = new LongMessageViewModel {MessageId = message.MessageId, Sender = message.Sender.UserName, Text = message.Text, Timestamp = message.Timestamp, Title = message.Title };
                 return PartialView("PartialDetails",model);
@@ -172,12 +191,14 @@ namespace Lab2Community.Controllers
             {
                 var user_id = User.Identity.GetUserId();
                 var msg = db.Messages.First(m => m.MessageId == id);
-                //db.Users.FirstOrDefault(u => u.Id.Equals(user_id)).MessagesReceived.Remove(msg);
-                msg.Deleted = true;
+                var user = db.Users.Find(user_id);
+                msg.DeletedByUsers.Add(user);
+                msg.DeletedByGroups = msg.DeletedByGroups.Union(user.Groups).ToList();
                 db.SaveChanges();
+                return From(msg.Sender.Id);
             }
 
-            return View();
+            
         }
 
         [HttpGet]
@@ -185,9 +206,12 @@ namespace Lab2Community.Controllers
         {
             using (var db = new ApplicationDbContext())
             {
+                var user_id = User.Identity.GetUserId();
+                var user = db.Users.Find(user_id);
                 var message = db.Messages.FirstOrDefault(m => m.MessageId == messageId);
                 var model = new TextMessageViewModel { Text = message.Text };
-                message.Read = true;
+                
+                message.ReadByUsers.Add(user);
                 db.SaveChanges();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }

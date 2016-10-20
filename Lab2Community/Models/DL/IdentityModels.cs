@@ -22,6 +22,8 @@ namespace Lab2Community.Models
 
         public virtual ICollection<Message> MessagesSent { get; set; }
         public virtual ICollection<Message> MessagesReceived { get; set; }
+        public virtual ICollection<Message> MessagesRead { get; set; }
+        public virtual ICollection<Message> MessagesDeleted { get; set; }
         public virtual ICollection<UserGroup> Groups { get; set; }
 
         public ApplicationUser()
@@ -29,6 +31,8 @@ namespace Lab2Community.Models
             MessagesSent = new List<Message>();
             MessagesReceived = new List<Message>();
             Groups = new List<UserGroup>();
+            MessagesRead = new List<Message>();
+            MessagesDeleted = new List<Message>();
         }
     }
 

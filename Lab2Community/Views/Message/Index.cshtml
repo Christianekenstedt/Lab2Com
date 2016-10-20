@@ -69,7 +69,7 @@
         alert("Delete");
         $.ajax({
             type: "POST",
-            url: "Delete",
+            url: '@Url.Action("Delete", "Message")',
             data: { id: id }
         }).done(function (data) {
             

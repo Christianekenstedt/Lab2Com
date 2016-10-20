@@ -13,12 +13,16 @@ namespace Lab2Community.Models.DL
         public int GroupId { get; set; }
         public string Name { get; set; }
         public virtual ICollection<ApplicationUser> Members { get; set; }
-        public virtual ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Message> MessagesReceived { get; set; }
+        public virtual ICollection<Message> MessagesRead { get; set; }
+        public virtual ICollection<Message> MessagesDeleted { get; set; }
 
         public UserGroup()
         {
             Members = new List<ApplicationUser>();
-            Messages = new List<Message>();
+            MessagesReceived = new List<Message>();
+            MessagesRead = new List<Message>();
+            MessagesDeleted = new List<Message>();
         }
     }
 }

@@ -17,15 +17,26 @@ namespace Lab2Community.Models.DL
         public virtual ApplicationUser Sender { get; set; }
         [InverseProperty("MessagesReceived")]
         public virtual ICollection<ApplicationUser> RecipientUsers { get; set; }
+        [InverseProperty("MessagesRead")]
+        public virtual ICollection<ApplicationUser> ReadByUsers { get; set; }
+        [InverseProperty("MessagesDeleted")]
+        public virtual ICollection<ApplicationUser> DeletedByUsers { get; set; }
+        [InverseProperty("MessagesReceived")]
         public virtual ICollection<UserGroup> RecipientGroups { get; set; }
+        [InverseProperty("MessagesRead")]
+        public virtual ICollection<UserGroup> ReadByGroups { get; set; }
+        [InverseProperty("MessagesDeleted")]
+        public virtual ICollection<UserGroup> DeletedByGroups { get; set; }
         public DateTime Timestamp { get; set; }
-        public bool Read { get; set; }
-        public bool Deleted { get; set; }
 
         public Message()
         {
             RecipientUsers = new List<ApplicationUser>();
             RecipientGroups = new List<UserGroup>();
+            ReadByUsers = new List<ApplicationUser>();
+            DeletedByUsers = new List<ApplicationUser>();
+            ReadByGroups = new List<UserGroup>();
+            DeletedByGroups = new List<UserGroup>(); 
         }
     }
 }

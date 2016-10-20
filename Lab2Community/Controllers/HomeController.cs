@@ -20,13 +20,18 @@ namespace Lab2Community.Controllers
             {
                 DateTime lastLogin;
                 var userId = User.Identity.GetUserId();
-                //var userObject = db.Users.First(p => p.Id.Equals(userId)); // maybe not useful
+                var userObject = db.Users.First(p => p.Id.Equals(userId)); // maybe not useful
                 var loginCountLastMonth = db.LoginRecords.Where(p => p.User.Id == userId && DbFunctions.DiffDays(p.TimeOfLogin, DateTime.Now) < 30).Count();
                 var lastLoginRecord = db.LoginRecords.Where(p => p.User.Id == userId).OrderByDescending(p => p.TimeOfLogin).Skip(1).FirstOrDefault();
-                var unreadMessagesDirectedToUser = db.Messages.Where(p => !p.Read && p.RecipientUsers.Where(u=>u.Id.Equals(userId)).Any()).ToList();
+
+                var unreadMessagesDirectedToUser = db.Messages.Where(
+                    m => m.RecipientUsers.Where(u=>u.Id.Equals(userId)).Any() 
+                    && !m.ReadByUsers.Where(u=>u.Id.Equals(userId)).Any() 
+                    && !m.DeletedByUsers.Where(u => u.Id.Equals(userId)).Any()).ToList();
+
                 var unreadMessagesDirectedToUserGroup = 
-                    db.Messages.Where(p => !p.Read && p.RecipientGroups.Intersect(db.UserGroups.Where(g => g.Members.Where(u=>u.Id.Equals(userId)).Any())).Any()).ToList();
-                var totalUnreadMessages = unreadMessagesDirectedToUser.Union(unreadMessagesDirectedToUserGroup).Distinct().Count();
+                    db.Messages.Where(p => p.RecipientGroups.Intersect(db.UserGroups.Where(g => g.Members.Where(u=>u.Id.Equals(userId)).Any())).Any()).ToList();
+                var totalUnreadMessages = unreadMessagesDirectedToUser.Union(unreadMessagesDirectedToUserGroup).Count();
                 if (lastLoginRecord == null)
                 {
                     lastLogin = DateTime.Now;

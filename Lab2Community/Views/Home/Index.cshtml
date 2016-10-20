@@ -6,9 +6,9 @@
 
 <div class="jumbotron">
     <h1>Welcome @User.Identity.GetUserName()!</h1>
-    <p class="lead">Your last visit was @Model.LastLogin</p>
-    <p>You have been logged in @Model.LoginsLastMonth times last month.</p>
-    <p>You have a total of @Model.UnreadMessagesCount unread messages.</p>
+    <p class="lead">Your last visit was at <strong>@Model.LastLogin</strong></p>
+    <p>You have been logged in <strong>@Model.LoginsLastMonth times </strong> last month.</p>
+    <p>You have a total of <strong>@Model.UnreadMessagesCount unread</strong> messages.</p>
 </div>
 
 <div class="row">
