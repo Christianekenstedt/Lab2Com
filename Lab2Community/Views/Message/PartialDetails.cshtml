@@ -1,0 +1,29 @@
+﻿@model Lab2Community.Models.View.LongMessageViewModel
+<h3>Content</h3>
+<hr />
+<div class="row">
+    <div class="col-md-8 text-left">
+        <h4> @Model.Title</h4>
+    </div>
+
+    <div class="col-md-4 text-right">
+        <p> @Model.Timestamp</p>
+    </div>
+        
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        From: <strong>@Model.Sender</strong>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <p>@Model.Text</p>
+    </div>
+    
+</div>
+<br />
+<button class="btn btn-danger" onclick="deleteMessage(@Model.MessageId)">Delete</button>

@@ -307,6 +307,8 @@
     <Content Include="Views\Message\From.cshtml" />
     <Content Include="Views\Message\List.cshtml" />
     <Content Include="Views\Message\Details.cshtml" />
+    <Content Include="Views\Message\PartialUsersMessages.cshtml" />
+    <Content Include="Views\Message\PartialDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -34,7 +34,7 @@ namespace Lab2Community.Controllers
         {
             if(id == null)
             {
-                return RedirectToAction("List", "Message");
+                return RedirectToAction("Index", "Message");
             }
 
             using (var db = new ApplicationDbContext())
@@ -50,7 +50,7 @@ namespace Lab2Community.Controllers
                     models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName, Read = m.Read, Timestamp = m.Timestamp, Title = m.Title });
                 }
 
-                return View(models);
+                return PartialView("PartialUsersMessages",models);
             }
         }
 
@@ -60,19 +60,14 @@ namespace Lab2Community.Controllers
         {
             using (var db = new ApplicationDbContext())
             {
-                var models = new List<ShortMessageViewModel>();
-                var user = db.Users.Find(User.Identity.GetUserId());
-                var messages = db.Messages.Where(m => m.RecipientUsers.Any(u => u.Id == user.Id)).ToList();
-
-                //Inte lazy?
-                foreach (Message m in messages)
+                List<RecieverViewModel> list = new List<RecieverViewModel>();
+                foreach (ApplicationUser au in db.Users.ToList())
                 {
-                    models.Add(new ShortMessageViewModel { MessageId = m.MessageId, Sender = m.Sender.UserName,  Read = m.Read, Timestamp = m.Timestamp, Title = m.Title});
+                    list.Add(new RecieverViewModel { RecieverId = au.Id, UserName = au.UserName });
                 }
-
-                return View(models);
+                return View(list);
             }
-           
+
         }
         [HttpGet]
         // GET: Message/Create
@@ -131,23 +126,23 @@ namespace Lab2Community.Controllers
         [HttpGet]
         public ActionResult Details(int? id)
         {
-            if (id == null) return RedirectToAction("List", "Message");
+            if (id == null) return RedirectToAction("Index", "Message");
 
             using (var db= new ApplicationDbContext())
             {
                 
                 var message = db.Messages.Find(id);
                 LongMessageViewModel model = new LongMessageViewModel {MessageId = message.MessageId, Sender = message.Sender.UserName, Text = message.Text, Timestamp = message.Timestamp, Title = message.Title };
-                return View(model);
+                return PartialView("PartialDetails",model);
             }
  
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult Delete(int? id)
         {
 
-            if (id == null) return RedirectToAction("List", "Messsage");
+            if (id == null) return RedirectToAction("Index", "Messsage");
 
             using (var db = new ApplicationDbContext())
             {
@@ -157,7 +152,7 @@ namespace Lab2Community.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("List", "Message");
+            return View();
         }
 
         [HttpGet]
