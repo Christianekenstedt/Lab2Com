@@ -4,6 +4,9 @@
     ViewBag.Title = "Index";
 }
 
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+
 <h2>Inbox</h2>
 
 <p>
@@ -46,8 +49,24 @@
             @Html.ActionLink("Edit", "Edit", new { id=item.MessageId }) |
             @Html.ActionLink("Details", "Details", new { id=item.MessageId }) |
             @Html.ActionLink("Delete", "Delete", new { id=item.MessageId })
+            <button onclick="openMessage(@item.MessageId)"> Open </button>
         </td>
     </tr>
 }
 
 </table>
+
+<script>
+    function openMessage(id){
+        $.ajax({
+            type: "GET",
+            url: "OpenMessage",
+            data: { messageId: id },
+            success: function (data) {
+                alert(data.Text);
+            },
+            dataType:"json"
+        });
+    }
+    
+</script>

@@ -71,4 +71,9 @@ namespace Lab2Community.Models.View
         public string UserName { get; set; }
         
     }
+
+    public class TextMessageViewModel
+    {
+        public string Text { get; set; }
+    }
 }

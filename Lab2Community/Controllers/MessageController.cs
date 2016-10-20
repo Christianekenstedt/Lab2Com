@@ -154,9 +154,23 @@ namespace Lab2Community.Controllers
                 var user_id = User.Identity.GetUserId();
                 var msg = db.Messages.First(m => m.MessageId == id);
                 db.Users.FirstOrDefault(u => u.Id.Equals(user_id)).MessagesReceived.Remove(msg);
+                db.SaveChanges();
             }
 
             return RedirectToAction("List", "Message");
+        }
+
+        [HttpGet]
+        public ActionResult OpenMessage(int messageId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var message = db.Messages.FirstOrDefault(m => m.MessageId == messageId);
+                var model = new TextMessageViewModel { Text = message.Text };
+                message.Read = true;
+                db.SaveChanges();
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
