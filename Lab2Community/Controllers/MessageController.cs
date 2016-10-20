@@ -81,10 +81,40 @@ namespace Lab2Community.Controllers
             {
                 List<RecieverViewModel> list = new List<RecieverViewModel>();
 
+                var userId = User.Identity.GetUserId();
+                var user = db.Users.FirstOrDefault(u => u.Id.Equals(userId));
+                var messagesToUser = db.Messages.Where(m => m.RecipientUsers.Any(u => u.Id.Equals(userId)));
+                var messagesToUserGroup = db.Messages.Where(m => m.RecipientGroups.Where(g => g.Members.Where(u => u.Id.Equals(userId)).Any()).Any());
+
+                var totalMessagesToUser = messagesToUser.Union(messagesToUserGroup);
+
+                var deletedMessages = totalMessagesToUser.Where(m => m.DeletedByUsers.Any(u=>u.Id.Equals(userId)) 
+                || m.DeletedByGroups.Where(g => g.Members.Any(u => u.Id.Equals(userId))).Any());
+
+                var readMessages = totalMessagesToUser.Where(m => m.ReadByUsers.Any(u => u.Id.Equals(userId)) ||
+                m.ReadByGroups.Where(g=>g.Members.Any(u=>u.Id.Equals(userId))).Any());
+  
+                int numberOfReadMessages = readMessages.Count();
+                int numberOfMessages = totalMessagesToUser.Count();
+                int numberOfDeletedMessaged = deletedMessages.Count();
+
+                
+
                 foreach (ApplicationUser au in db.Users.ToList())
                 {
                     list.Add(new RecieverViewModel { RecieverId = au.Id, UserName = au.UserName });
                 }
+
+                //Använd denna nya model till index-sidan för meddelanden.
+                SeeSendersViewModel model = new SeeSendersViewModel
+                {
+                    ReadMessagesCount = numberOfReadMessages,
+                    TotalMessagesCount = numberOfMessages,
+                    DeletedMessagesCount = numberOfDeletedMessaged,
+                    Senders = list
+
+                };
+
                 return View(list);
             }
 

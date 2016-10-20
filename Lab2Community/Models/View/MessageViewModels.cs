@@ -87,6 +87,16 @@ namespace Lab2Community.Models.View
         
     }
 
+    public class SeeSendersViewModel
+    {
+        public IEnumerable<RecieverViewModel> Senders { get; set; }
+        
+        public int ReadMessagesCount { get; set; }
+        public int DeletedMessagesCount { get; set; }
+        public int TotalMessagesCount { get; set;}
+         
+    }
+
     public class TextMessageViewModel
     {
         public string Text { get; set; }
