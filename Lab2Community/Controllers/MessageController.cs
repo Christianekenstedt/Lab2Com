@@ -45,9 +45,12 @@ namespace Lab2Community.Controllers
                 var user = db.Users.FirstOrDefault(p=>p.Id.Equals(userId));
                 var messagesToUser = db.Messages.Where(
                     m => m.RecipientUsers.Any(u => u.Id.Equals(user.Id)) && 
-                    !m.DeletedByUsers.Any(u=>u.Id.Equals(user.Id))).ToList();
+                    !m.DeletedByUsers.Any(u=>u.Id.Equals(user.Id))&&
+                    m.Sender.Id.Equals(id)).ToList();
 
-                var messagesToUserGroup = db.Messages.Where(m => m.RecipientGroups.Where(g=>g.Members.Where(u=>u.Id.Equals(userId)).Any() && !m.DeletedByGroups.Contains(g)).Any()).ToList();
+                var messagesToUserGroup = db.Messages.Where(m => m.Sender.Id.Equals(id) &&
+                m.RecipientGroups.Where(g=>g.Members.Where(u=>u.Id.Equals(userId)).Any() &&
+                !m.DeletedByGroups.Contains(g)).Any()).ToList();
 
                 var msgs = messagesToUser.Union(messagesToUserGroup).ToList();
 
@@ -66,7 +69,7 @@ namespace Lab2Community.Controllers
                     models.Add(new ShortMessageViewModel { Read = read, MessageId = m.MessageId, Sender = m.Sender.UserName, Timestamp = m.Timestamp, Title = m.Title });
                 }
 
-                return PartialView("PartialUsersMessages",models.OrderByDescending(m=>m.Timestamp));
+                return PartialView("_UsersMessages",models.OrderByDescending(m=>m.Timestamp));
             }
         }
 
@@ -176,7 +179,7 @@ namespace Lab2Community.Controllers
                 message.ReadByGroups = message.ReadByGroups.Union(user.Groups).ToList();
                 db.SaveChanges();
                 LongMessageViewModel model = new LongMessageViewModel {MessageId = message.MessageId, Sender = message.Sender.UserName, Text = message.Text, Timestamp = message.Timestamp, Title = message.Title };
-                return PartialView("PartialDetails",model);
+                return PartialView("_Details",model);
             }
  
         }

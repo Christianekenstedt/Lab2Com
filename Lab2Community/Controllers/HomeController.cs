@@ -30,7 +30,7 @@ namespace Lab2Community.Controllers
                     && !m.DeletedByUsers.Where(u => u.Id.Equals(userId)).Any()).ToList();
 
                 var unreadMessagesDirectedToUserGroup = 
-                    db.Messages.Where(p => p.RecipientGroups.Intersect(db.UserGroups.Where(g => g.Members.Where(u=>u.Id.Equals(userId)).Any())).Any()).ToList();
+                    db.Messages.Where(p => p.RecipientGroups.Intersect(db.UserGroups.Where(g => !p.DeletedByGroups.Contains(g)&&!p.ReadByGroups.Contains(g) && g.Members.Where(u=>u.Id.Equals(userId)).Any())).Any()).ToList();
                 var totalUnreadMessages = unreadMessagesDirectedToUser.Union(unreadMessagesDirectedToUserGroup).Count();
                 if (lastLoginRecord == null)
                 {
