@@ -7,6 +7,12 @@ using System.Web;
 
 namespace Lab2Community.Models.DL
 {
+    /// <summary>
+    /// Data entity representing a user group.
+    /// Messages can be sent to user groups.
+    /// Users can join and leave user groups.
+    /// Users can create new groups
+    /// </summary>
     public class UserGroup
     {
         [Key]

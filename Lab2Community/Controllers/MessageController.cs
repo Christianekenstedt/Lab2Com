@@ -15,22 +15,11 @@ namespace Lab2Community.Controllers
     public class MessageController : Controller
     {
 
-       
-
-        [HttpGet]
-        public ActionResult List()
-        {
-            using (var db = new ApplicationDbContext())
-            {
-                List<RecieverViewModel> list = new List<RecieverViewModel>();
-                foreach (ApplicationUser au in db.Users.ToList())
-                {
-                    list.Add(new RecieverViewModel {RecieverId = au.Id, UserName = au.UserName});
-                }
-                return View(list);
-            }
-        }
-
+        /// <summary>
+        /// Controller for the view where messages from a specific user is shown.
+        /// </summary>
+        /// <param name="id">The id of the user</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult From(string id)
         {
@@ -74,6 +63,10 @@ namespace Lab2Community.Controllers
             }
         }
 
+        /// <summary>
+        /// The index page when viewing messages. Initially a list of users is displayed.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         // GET: Message
         public ActionResult Index()
@@ -120,6 +113,11 @@ namespace Lab2Community.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Controller for the view where users can compose new messages.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         // GET: Message/Create
         public ActionResult Create()
@@ -128,6 +126,10 @@ namespace Lab2Community.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// A helper method to generate the viewmodels that is used when creating a new message.
+        /// </summary>
+        /// <returns></returns>
         private CreateMessageViewModel generateCreateMessageModel()
         {
             using (var db = new ApplicationDbContext())
@@ -155,6 +157,11 @@ namespace Lab2Community.Controllers
             }
         }
 
+        /// <summary>
+        /// Controller method for posting new messages to the system.
+        /// </summary>
+        /// <param name="model">The model which contains the new message properties</param>
+        /// <returns></returns>
         [HttpPost]
         // POST: Message/Create
         public ActionResult Create(CreateMessageViewModel model)
@@ -196,6 +203,11 @@ namespace Lab2Community.Controllers
             return View("Error");
         }
 
+        /// <summary>
+        /// Displays details for a specific message. 
+        /// </summary>
+        /// <param name="id">The message to display</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Details(int? id)
         {
@@ -215,6 +227,11 @@ namespace Lab2Community.Controllers
  
         }
 
+        /// <summary>
+        /// Delete a message.
+        /// </summary>
+        /// <param name="id">Id of the message to delete.</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Delete(int? id)
         {
@@ -233,22 +250,6 @@ namespace Lab2Community.Controllers
             }
 
             
-        }
-
-        [HttpGet]
-        public ActionResult OpenMessage(int messageId)
-        {
-            using (var db = new ApplicationDbContext())
-            {
-                var user_id = User.Identity.GetUserId();
-                var user = db.Users.Find(user_id);
-                var message = db.Messages.FirstOrDefault(m => m.MessageId == messageId);
-                var model = new TextMessageViewModel { Text = message.Text };
-                
-                message.ReadByUsers.Add(user);
-                db.SaveChanges();
-                return Json(model, JsonRequestBehavior.AllowGet);
-            }
         }
     }
 }

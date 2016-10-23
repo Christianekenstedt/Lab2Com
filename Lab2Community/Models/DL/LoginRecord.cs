@@ -6,6 +6,9 @@ using System.Web;
 
 namespace Lab2Community.Models.DL
 {
+    /// <summary>
+    /// Data entity containing information from when users logged in to the system.
+    /// </summary>
     public class LoginRecord
     {
         [Key]

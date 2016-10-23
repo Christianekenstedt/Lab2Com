@@ -7,6 +7,10 @@ using System.Web;
 
 namespace Lab2Community.Models.DL
 {
+    /// <summary>
+    /// Data entity representing a message with recipients, sender, timestamp and status of read/deleted.
+    /// Each message holds information about who has read it and who has deleted it.
+    /// </summary>
     public class Message
     {
         [Key]

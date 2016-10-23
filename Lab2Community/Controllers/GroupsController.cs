@@ -14,6 +14,11 @@ namespace Lab2Community.Controllers
     [Authorize]
     public class GroupsController : Controller
     {
+        /// <summary>
+        /// Controller method for the index page of user groups.
+        /// Displays a list with all available groups.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         // GET: Groups
         public ActionResult Index()
@@ -33,12 +38,21 @@ namespace Lab2Community.Controllers
             
         }
 
+        /// <summary>
+        /// Get the create new group view.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
 
+        /// <summary>
+        /// Controller method to use when creating a new group
+        /// </summary>
+        /// <param name="model">View model that contains necessery properties of the new group.</param>
+        /// <returns></returns>
         [HttpPost]
         // POST: Groups/Create
         public ActionResult Create(CreateUserGroupViewModel model)
@@ -59,6 +73,11 @@ namespace Lab2Community.Controllers
             return View("Error");
         }
 
+        /// <summary>
+        /// Show details of selected group.
+        /// </summary>
+        /// <param name="id">The id of the group to show.</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Details(int? id)
         {
@@ -85,6 +104,11 @@ namespace Lab2Community.Controllers
             }
         }
 
+        /// <summary>
+        /// Method to use when joining a group.
+        /// </summary>
+        /// <param name="id">Id of the group to join</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Join(int id)
         {
@@ -98,6 +122,11 @@ namespace Lab2Community.Controllers
             }
         }
 
+        /// <summary>
+        /// Action to use when leaving a group.
+        /// </summary>
+        /// <param name="id">The id of the group to leave</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Leave(int id)
         {

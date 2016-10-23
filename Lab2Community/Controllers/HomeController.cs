@@ -14,6 +14,10 @@ namespace Lab2Community.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Controller method for viewing the index page of home.
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             using(var db = new ApplicationDbContext())
@@ -48,14 +52,14 @@ namespace Lab2Community.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "A community made for a school project.";
 
             return View();
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "antonwas@kth.se";
 
             return View();
         }
