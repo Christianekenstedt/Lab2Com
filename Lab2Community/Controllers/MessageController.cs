@@ -115,7 +115,7 @@ namespace Lab2Community.Controllers
 
                 };
 
-                return View(list);
+                return View(model);
             }
 
         }

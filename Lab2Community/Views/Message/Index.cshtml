@@ -1,4 +1,4 @@
-﻿@model IEnumerable< Lab2Community.Models.View.RecieverViewModel >
+﻿@model Lab2Community.Models.View.SeeSendersViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -20,7 +20,7 @@
         <div class="col-sm-3">
             <h3>Sender(s)</h3>            
             <hr />
-            @foreach (var user in Model)
+            @foreach (var user in Model.Senders)
             {
                 <a href="javascript:void(0)" onclick="openMessagesFromUser('@user.RecieverId.ToString()')">
                     <div>
@@ -40,7 +40,11 @@
         <div id="detalisPartial" class="col-sm-6"></div>
 
     </div> 
-           
+    <div class="row">
+        <div class="col-sm-3">
+            @Html.Label("Message total/read/deleted - " + Model.TotalMessagesCount + "/" + Model.ReadMessagesCount + "/" + Model.DeletedMessagesCount)
+        </div>
+    </div>    
 </div>
         
 
