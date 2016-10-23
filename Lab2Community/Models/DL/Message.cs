@@ -12,6 +12,8 @@ namespace Lab2Community.Models.DL
         [Key]
         public int MessageId { get; set; }
         public string Title { get; set; }
+        [Required]
+        [MinLength(1)]
         public string Text { get; set; }
         [InverseProperty("MessagesSent")]
         public virtual ApplicationUser Sender { get; set; }

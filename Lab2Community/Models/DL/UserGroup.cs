@@ -11,6 +11,8 @@ namespace Lab2Community.Models.DL
     {
         [Key]
         public int GroupId { get; set; }
+        [Required]
+        [MinLength(3)]
         public string Name { get; set; }
         public virtual ICollection<ApplicationUser> Members { get; set; }
         public virtual ICollection<Message> MessagesReceived { get; set; }
