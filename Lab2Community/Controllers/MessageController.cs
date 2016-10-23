@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Lab2Community.Controllers
 {
+    [Authorize]
     public class MessageController : Controller
     {
 
