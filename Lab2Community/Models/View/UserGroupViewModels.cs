@@ -32,5 +32,4 @@ namespace Lab2Community.Models.View
     {
 
     }
-
 }
