@@ -48,8 +48,7 @@
 </div>
         
 
-<script>
-
+<script type="text/javascript">
     function openMessagesFromUser(id) {
         $.ajax({
             type: "GET",
@@ -75,7 +74,7 @@
             url: '@Url.Action("Delete", "Message")',
             data: { id: id }
         }).done(function (data) {
-            
+            window.location.href = 'Index';
         });
     }
 </script>
